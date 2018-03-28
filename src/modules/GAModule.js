@@ -14,6 +14,30 @@ export default class GAModule extends BasicModule {
 
   init (initConf = {}) {
 
+      if (initConf['optimizeContainer']) {
+        (function (a, s, y, n, c, h, i, d, e) {
+          s.className += ' ' + y;
+          h.start = 1 * new Date;
+          h.end = i = function() {
+            s.className = s.className.replace(RegExp(' ?'+y),'')
+          };
+          (a[n] = a[n] || []).hide = h;
+          setTimeout(function () {
+            i();
+            h.end = null;
+          }, c);
+          h.timeout = c;
+        })(
+          window, document.documentElement, 'async-hide', 'dataLayer', 4000,
+          { [initConf['optimizeContainer']] : true }
+        );
+
+        var style = document.createElement('style');
+        style.type = 'text/css';
+        style.innerHTML = '.async-hide { opacity: 0 !important}';
+        document.getElementsByTagName('head')[0].appendChild(style);
+      }
+
       // Load the analytics snippet
       (function (i, s, o, g, r, a, m) {
         i[ 'GoogleAnalyticsObject' ] = r;
@@ -40,6 +64,9 @@ export default class GAModule extends BasicModule {
 
       // register tracker
       ga('create', initConf.trackingId, 'auto')
+      if (initConf['optimizeContainer']) {
+        ga('require', initConf['optimizeContainer'])
+      }
       ga("set", "transport", "beacon")
 
       // set app name and version

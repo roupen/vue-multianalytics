@@ -586,6 +586,8 @@ module.exports =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -613,6 +615,27 @@ module.exports =
 	      var initConf = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 
+	      if (initConf['optimizeContainer']) {
+	        (function (a, s, y, n, c, h, i, d, e) {
+	          s.className += ' ' + y;
+	          h.start = 1 * new Date();
+	          h.end = i = function i() {
+	            s.className = s.className.replace(RegExp(' ?' + y), '');
+	          };
+	          (a[n] = a[n] || []).hide = h;
+	          setTimeout(function () {
+	            i();
+	            h.end = null;
+	          }, c);
+	          h.timeout = c;
+	        })(window, document.documentElement, 'async-hide', 'dataLayer', 4000, _defineProperty({}, initConf['optimizeContainer'], true));
+
+	        var style = document.createElement('style');
+	        style.type = 'text/css';
+	        style.innerHTML = '.async-hide { opacity: 0 !important}';
+	        document.getElementsByTagName('head')[0].appendChild(style);
+	      }
+
 	      // Load the analytics snippet
 	      (function (i, s, o, g, r, a, m) {
 	        i['GoogleAnalyticsObject'] = r;
@@ -637,6 +660,9 @@ module.exports =
 
 	      // register tracker
 	      ga('create', initConf.trackingId, 'auto');
+	      if (initConf['optimizeContainer']) {
+	        ga('require', initConf['optimizeContainer']);
+	      }
 	      ga("set", "transport", "beacon");
 
 	      // set app name and version
@@ -661,8 +687,8 @@ module.exports =
 
 	  }, {
 	    key: 'trackView',
-	    value: function trackView(_ref) {
-	      var viewName = _ref.viewName;
+	    value: function trackView(_ref2) {
+	      var viewName = _ref2.viewName;
 
 	      if (this.config.debug) {
 	        (0, _utils.logDebug)(viewName);
@@ -694,16 +720,16 @@ module.exports =
 
 	  }, {
 	    key: 'trackEvent',
-	    value: function trackEvent(_ref2) {
-	      var _ref2$category = _ref2.category,
-	          category = _ref2$category === undefined ? "Event" : _ref2$category,
-	          action = _ref2.action,
-	          _ref2$label = _ref2.label,
-	          label = _ref2$label === undefined ? null : _ref2$label,
-	          _ref2$value = _ref2.value,
-	          value = _ref2$value === undefined ? null : _ref2$value,
-	          _ref2$callback = _ref2.callback,
-	          callback = _ref2$callback === undefined ? null : _ref2$callback;
+	    value: function trackEvent(_ref3) {
+	      var _ref3$category = _ref3.category,
+	          category = _ref3$category === undefined ? "Event" : _ref3$category,
+	          action = _ref3.action,
+	          _ref3$label = _ref3.label,
+	          label = _ref3$label === undefined ? null : _ref3$label,
+	          _ref3$value = _ref3.value,
+	          value = _ref3$value === undefined ? null : _ref3$value,
+	          _ref3$callback = _ref3.callback,
+	          callback = _ref3$callback === undefined ? null : _ref3$callback;
 
 	      if (this.config.debug) {
 	        _utils.logDebug.apply(undefined, arguments);
@@ -740,11 +766,11 @@ module.exports =
 
 	  }, {
 	    key: 'trackException',
-	    value: function trackException(_ref3) {
-	      var _ref3$description = _ref3.description,
-	          description = _ref3$description === undefined ? "" : _ref3$description,
-	          _ref3$isFatal = _ref3.isFatal,
-	          isFatal = _ref3$isFatal === undefined ? false : _ref3$isFatal;
+	    value: function trackException(_ref4) {
+	      var _ref4$description = _ref4.description,
+	          description = _ref4$description === undefined ? "" : _ref4$description,
+	          _ref4$isFatal = _ref4.isFatal,
+	          isFatal = _ref4$isFatal === undefined ? false : _ref4$isFatal;
 
 	      if (this.config.debug) {
 	        (0, _utils.logDebug)({ description: description, isFatal: isFatal });
@@ -792,15 +818,15 @@ module.exports =
 
 	  }, {
 	    key: 'identify',
-	    value: function identify(_ref4) {
-	      var userId = _ref4.userId;
+	    value: function identify(_ref5) {
+	      var userId = _ref5.userId;
 
 	      this.setUsername(userId);
 	    }
 	  }, {
 	    key: 'setUserProperties',
-	    value: function setUserProperties(_ref5) {
-	      var properties = _ref5.properties;
+	    value: function setUserProperties(_ref6) {
+	      var properties = _ref6.properties;
 	    }
 	    // this.setDimensionsAndMetrics(properties)
 
@@ -819,18 +845,18 @@ module.exports =
 
 	  }, {
 	    key: 'addTransaction',
-	    value: function addTransaction(_ref6) {
-	      var id = _ref6.id,
-	          _ref6$affiliation = _ref6.affiliation,
-	          affiliation = _ref6$affiliation === undefined ? '' : _ref6$affiliation,
-	          _ref6$revenue = _ref6.revenue,
-	          revenue = _ref6$revenue === undefined ? 0 : _ref6$revenue,
-	          _ref6$shipping = _ref6.shipping,
-	          shipping = _ref6$shipping === undefined ? 0 : _ref6$shipping,
-	          _ref6$tax = _ref6.tax,
-	          tax = _ref6$tax === undefined ? 0 : _ref6$tax,
-	          _ref6$currency = _ref6.currency,
-	          currency = _ref6$currency === undefined ? 'USD' : _ref6$currency;
+	    value: function addTransaction(_ref7) {
+	      var id = _ref7.id,
+	          _ref7$affiliation = _ref7.affiliation,
+	          affiliation = _ref7$affiliation === undefined ? '' : _ref7$affiliation,
+	          _ref7$revenue = _ref7.revenue,
+	          revenue = _ref7$revenue === undefined ? 0 : _ref7$revenue,
+	          _ref7$shipping = _ref7.shipping,
+	          shipping = _ref7$shipping === undefined ? 0 : _ref7$shipping,
+	          _ref7$tax = _ref7.tax,
+	          tax = _ref7$tax === undefined ? 0 : _ref7$tax,
+	          _ref7$currency = _ref7.currency,
+	          currency = _ref7$currency === undefined ? 'USD' : _ref7$currency;
 
 	      ga('ecommerce:addTransaction', {
 	        id: id,
@@ -856,15 +882,15 @@ module.exports =
 
 	  }, {
 	    key: 'addItem',
-	    value: function addItem(_ref7) {
-	      var id = _ref7.id,
-	          name = _ref7.name,
-	          sku = _ref7.sku,
-	          category = _ref7.category,
-	          _ref7$price = _ref7.price,
-	          price = _ref7$price === undefined ? 0 : _ref7$price,
-	          _ref7$quantity = _ref7.quantity,
-	          quantity = _ref7$quantity === undefined ? 1 : _ref7$quantity;
+	    value: function addItem(_ref8) {
+	      var id = _ref8.id,
+	          name = _ref8.name,
+	          sku = _ref8.sku,
+	          category = _ref8.category,
+	          _ref8$price = _ref8.price,
+	          price = _ref8$price === undefined ? 0 : _ref8$price,
+	          _ref8$quantity = _ref8.quantity,
+	          quantity = _ref8$quantity === undefined ? 1 : _ref8$quantity;
 
 	      ga('ecommerce:addItem', {
 	        id: id,
